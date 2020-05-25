@@ -1,0 +1,236 @@
+<div *ngIf="authorized">
+  <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark elegant-color">
+
+    <mdb-navbar-brand><a class="navbar-brand text-light">Coordinator</a></mdb-navbar-brand>
+
+    <links>
+
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link waves-light" mdbWavesEffect (click)="toggleFeedbackTab()" role="button">Feedback</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light" mdbWavesEffect (click)="toggleTrainingProgramTab()" role="button">Training
+            Programs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light" mdbWavesEffect (click)="toggleEnrollTab()" role="button">Enroll Student</a>
+        </li>
+
+      </ul>
+      <!-- Links -->
+    </links>
+
+  </mdb-navbar>
+
+  <div *ngIf="feedbackTab">
+
+    <div>
+      <div class="container col-md-9">
+
+        <h2>Training Programs List</h2>
+        <table mdbTable>
+          <thead class="black white-text">
+            <th>Program Id</th>
+            <th>View Feedback</th>
+          </thead>
+          <tr *ngFor="let program of trainingPrograms">
+            <td>{{program.id}}</td>
+            <td><button mdbBtn color="info" (click)="viewFeedbackOfTrainingProgram(program.id)">Show
+                Feedbacks</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="viewFeedback">
+
+      <div class="container col-md-9">
+        <h2>FeedBack Report</h2>
+
+        <table mdbTable>
+          <thead class="black white-text" *ngIf="feedbacks.length>0">
+            <th>Program ID</th>
+            <th>Trainer ID</th>
+            <th>Presentation and communication skills of faculty</th>
+            <th>Ability to clarify doubts and explain difficult points</th>
+            <th>Time management in completing the content</th>
+            <th>Handout provided(Student Guide)</th>
+            <th>Hardware, software and network availability</th>
+          </thead>
+          <tr *ngFor="let feedback of feedbacks">
+            <td>{{feedback.trainingProgram.id}}</td>
+            <td>{{feedback.trainingProgram.trainer.trainerId}}</td>
+            <td>{{feedback.criteriaFirst}}</td>
+            <td>{{feedback.criteriaSecond}}</td>
+            <td>{{feedback.criteriaThird}}</td>
+            <td>{{feedback.criteriaFourth}}</td>
+            <td>{{feedback.criteriaFifth}}</td>
+
+          </tr>
+        </table>
+
+        <h2>Defaulters List</h2>
+        <table mdbTable>
+          <thead class="black white-text" *ngIf="defaulters.length>0">
+            <th>Student ID</th>
+            <th>Student Name</th>
+          </thead>
+          <tr *ngFor="let student of defaulters">
+            <td>{{student.id}}</td>
+            <td>{{student.username}}</td>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="trainingProgramTab">
+    <div class="container col-md-9">
+
+      <h2>Training Programs List</h2>
+      <table mdbTable striped="true">
+        <thead class="black white-text">
+          <th>Program Id</th>
+          <th>Course ID</th>
+          <th>Trainer ID</th>
+          <th>StartDate</th>
+          <th>EndDate</th>
+          <th>Action</th>
+        </thead>
+        <tr *ngFor="let program of trainingPrograms">
+          <td>{{program.id}}</td>
+          <td>{{program.course.courseId}}</td>
+          <td>{{program.trainer.trainerId}}</td>
+          <td>{{program.startDate}}</td>
+          <td>{{program.endDate}}</td>
+          <td><button mdbBtn color="info"
+              (click)="updateTrainingProgram(program.id,program.course.courseId,program.trainer.trainerId)">Update</button>
+            <button mdbBtn color="danger" (click)="deleteTrainingProgram(program.id)">Delete</button></td>
+        </tr>
+        <tr>
+          <td>
+            <input type="text" class="form-control" #idTrainingProgram="ngModel" 
+              pattern="^TP[0-9]{3}$" placeholder="Enter Program Id" id="ProgramID" [(ngModel)]="tpID"
+              class="form-control" required>
+            <div *ngIf="idTrainingProgram.touched && !idTrainingProgram.valid" class="alert alert-danger">Invalid
+              training Program ID format
+            </div>
+          </td>
+          <td>
+            <input type="text" class="form-control" #idc="ngModel" pattern="^C[0-9]{3}$" placeholder="Enter Course ID"
+              id="CourseID" [(ngModel)]="cID" class="form-control" required>
+            <div *ngIf="idc.touched && !idc.valid" class="alert alert-danger">Invalid
+              course ID format
+            </div>
+          </td>
+          <td>
+            <input type="text" class="form-control" #idt="ngModel" pattern="^TR[0-9]{4}$" placeholder="Enter Trainer ID"
+              id="TrainerID" [(ngModel)]="tID" class="form-control" required>
+            <div *ngIf="idt.touched && !idt.valid" class="alert alert-danger">Invalid
+              trainer ID format
+            </div>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [max]="date" [matDatepicker]="picker1" (dateInput)="addStartDateEvent($event)"
+                class="form-control" required>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [min]="date" [matDatepicker]="picker2" (dateInput)="addEndDateEvent($event)"
+                class="form-control" required>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+          </td>
+          <td>
+            <button mdbBtn color="success" (click)="addTrainingprogram()">Add</button>
+          </td>
+        </tr>
+        <tr *ngIf="enableUpdate">
+          <td>
+            {{tpIDUpdate}}
+          </td>
+          <td>
+            <input type="text" class="form-control" #idcu="ngModel" pattern="^C[0-9]{3}$" placeholder="Enter Course ID" id="CourseIDUpdate"
+              [(ngModel)]="cIDUpdate" class="form-control" required>
+              <div *ngIf="idcu.touched && !idcu.valid" class="alert alert-danger">Invalid
+                course ID format
+              </div>
+              
+          </td>
+          <td>
+            <input type="text" class="form-control" #idtu="ngModel" pattern="^TR[0-9]{4}$" placeholder="Enter Trainer ID" id="TrainerIDUpdate"
+              [(ngModel)]="tIDUpdate" class="form-control" required>
+              <div *ngIf="idtu.touched && !idtu.valid" class="alert alert-danger">Invalid
+                trainer ID format
+              </div>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [max]="date" [matDatepicker]="picker1" (dateInput)="addStartDateEvent($event)"
+                class="form-control" required>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [min]="date" [matDatepicker]="picker2" (dateInput)="addEndDateEvent($event)"
+                class="form-control" required>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+          </td>
+          <td>
+            <button mdbBtn color="success" (click)="updateTrainingProgramFinal()">Update</button>
+            <button mdbBtn color="danger" (click)="cancelUpdate()">Cancel Update</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="enrollTab">
+    <div class="container col-md-9">
+
+      <h2>Training Programs List</h2>
+      <table mdbTable>
+        <thead class="black white-text">
+          <th>Program Id</th>
+          <th>View Feedback</th>
+        </thead>
+        <tr *ngFor="let program of trainingPrograms">
+          <td>{{program.id}}</td>
+          <td><button mdbBtn color="info" (click)="enrollStudent(program.id)">Enroll Student</button></td>
+        </tr>
+      </table>
+      <div *ngIf="enrollFlag">
+        <h2>Students To Enroll</h2>
+        <table mdbTable>
+          <thead class="black white-text">
+            <th>Student Id</th>
+            <th>Name</th>
+            <th>Enroll</th>
+          </thead>
+          <tr *ngFor="let student of students">
+            <td>{{student.id}}</td>
+            <td>{{student.username}}</td>
+            <td><button mdbBtn color="success" (click)="enroll(student.id)">Enroll</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,166 @@
+<div *ngIf="authorized">
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark elegant-color">
+
+  <mdb-navbar-brand><a class="navbar-brand text-light">Admin</a><p>{{ content }}</p></mdb-navbar-brand>
+
+  <links>
+
+      <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+              <a class="nav-link waves-light" mdbWavesEffect (click)="toggleFeedbackTab()"  role="button">Feedback</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link waves-light" mdbWavesEffect (click)="toggleTrainerTab()" role="button">Trainer</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link waves-light" mdbWavesEffect (click)="toggleCourseTab()" role="button">Course</a>
+          </li>
+
+      </ul>
+      <!-- Links -->
+  </links>
+  <!-- Collapsible content -->
+
+</mdb-navbar>
+<!--/.Navbar-->
+
+<div *ngIf="feedbackTab">
+
+  <div>
+    <div class="container col-md-9">
+
+      <h2>Training Programs List</h2>
+      <table mdbTable>
+        <thead class="black white-text">
+          <th>Program Id</th>
+          <th>View Feedback</th>
+        </thead>
+        <tr *ngFor="let program of trainingPrograms">
+          <td>{{program.id}}</td>
+          <td><button mdbBtn color="info" (click)="viewFeedbackOfTrainingProgram(program.id)">Show
+              Feedbacks</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="viewFeedback">
+
+    <div class="container col-md-9">
+      <h2>FeedBack Report</h2>
+    
+      <table mdbTable>
+        <thead class="black white-text" *ngIf="feedbacks.length>0">
+          <th>Program ID</th>
+          <th>Trainer ID</th>
+          <th>Presentation and communication skills of faculty</th>
+          <th>Ability to clarify doubts and explain difficult points</th>
+          <th>Time management in completing the content</th>
+          <th>Handout provided(Student Guide)</th>
+          <th>Hardware, software and network availability</th>
+        </thead>
+        <tr *ngFor="let feedback of feedbacks">
+          <td>{{feedback.trainingProgram.id}}</td>
+          <td>{{feedback.trainingProgram.trainer.trainerId}}</td>
+          <td>{{feedback.criteriaFirst}}</td>
+          <td>{{feedback.criteriaSecond}}</td>
+          <td>{{feedback.criteriaThird}}</td>
+          <td>{{feedback.criteriaFourth}}</td>
+          <td>{{feedback.criteriaFifth}}</td>
+
+        </tr>
+      </table>
+
+      <h2>Defaulters List</h2>
+      <table mdbTable>
+        <thead class="black white-text" *ngIf="defaulters.length>0">
+          <th>Student ID</th>
+          <th>Student Name</th>
+        </thead>
+        <tr *ngFor="let student of defaulters">
+          <td>{{student.id}}</td>
+          <td>{{student.username}}</td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="trainerTab">
+
+
+  <div class="container col-md-9">
+    <h2>Trainer Skill Maintenance</h2>
+
+    <table mdbTable>
+      <thead class="black white-text">
+        <th>Trainer Id</th>
+        <th>Trainer Name</th>
+        <th>Skills</th>
+        <th>Update Skill</th>
+      </thead>
+      <tr *ngFor="let trainer of trainers">
+        <td>{{trainer.trainerId}}</td>
+        <td>{{trainer.trainerName}}</td>
+        <td>{{trainer.skill}}</td>
+        <td><button mdbBtn color="info" (click)="manageSkills(trainer.trainerId)">Update skills</button></td>
+      </tr>
+    </table>
+    <div *ngIf="showSkillsFlag">
+      <h2>Skill Updation</h2>
+      <table mdbTable>
+        <thead class="black white-text">
+          <th>Skill</th>
+          <th>Action</th>
+        </thead>
+        <tr *ngFor="let skill of skillsToUpdate">
+          <td>
+            {{skill}}
+          </td>
+          <td>
+            <button mdbBtn color="danger" (click)="deleteSkill(skill)">Delete</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="text" class="form-control" placeholder="Enter skill here" id="skill">
+          </td>
+          <td>
+            <button mdbBtn color="success" (click)="addSkill()">Add Skill</button>
+          </td>
+        </tr>
+        <tr><td>
+          <button mdbBtn color="success"  (click)="updateSkills()">Update Skills</button>
+        </td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="courseTab">
+  <div class="container col-md-9">
+    <h2>Course Maintenance</h2>
+    <table mdbTable>
+      <thead class="black white-text">
+        <th>Course Id</th>
+        <th>Course Name</th>
+        <th>No. of days</th>
+        <th>Update</th>
+      </thead>
+      <tr *ngFor="let course of courses">
+        <td>{{course.courseId}}</td>
+       <td> <input type="text" [(ngModel)]="course.courseName"
+                class="form-control"></td>
+        <td><input type="number" [(ngModel)]="course.noOfDays" 
+          class="form-control" min="1"></td>
+        <td><button mdbBtn color="info" (click)="updateCourse(course.courseId,course.courseName,course.noOfDays)">Update course</button></td>
+      </tr>
+    </table>
+  </div>
+  <div >
+
+  </div>
+</div>
+</div>

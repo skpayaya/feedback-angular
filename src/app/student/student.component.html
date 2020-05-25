@@ -1,0 +1,107 @@
+<div *ngIf="authorized">
+
+    <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark elegant-color">
+
+        <mdb-navbar-brand><a class="navbar-brand text-light"></a></mdb-navbar-brand>
+
+        <links>
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link waves-light" mdbWavesEffect (click)="toggleAddFeedbackTab()" role="button">Add
+                        Feedback</a>
+                </li>
+
+
+            </ul>
+            <!-- Links -->
+        </links>
+        <!-- Collapsible content -->
+
+    </mdb-navbar>
+    <!--/.Navbar-->
+
+    <div *ngIf="addFeedbacktab">
+        <!-- Default form login -->
+        <form class="text-center border border-light p-5">
+            <select class="browser-default custom-select" [(ngModel)]="trainingProgramId" name="trainingProgramid"
+                id="trainingProgramId">
+                <option selected>Select training program</option>
+                <option *ngFor="let item of trainingProgramsPending" [value]="item.id">{{item.id}}</option>
+            </select>
+            <table mdbTable>
+                <thead class="black white-text">
+                    <th>Criteria</th>
+                    <th>Enter Rating</th>
+                </thead>
+                <tr>
+                    <td>Presentation and communication skills of faculty</td>
+                    <td><input required type="number" [(ngModel)]="criteriaFirst" #criteriaFirst1="ngModel"
+                         class="form-control" name="criteriaFirst" min="1" max="5">
+                
+                    <div class="alert alert-danger" *ngIf="criteriaFirst1.touched && !criteriaFirst1.valid">
+                        Required
+                    </div>
+                    <div class="alert alert-danger" *ngIf="criteriaFirst1.touched && lessThan(5,criteriaFirst1.value)">Not in range of 1-5</div>
+                    <div  class="alert alert-danger" *ngIf="criteriaFirst1.touched && lessThan(criteriaFirst1.value,1)">Not in range of 1-5</div>
+
+                </td>
+                </tr>
+                <tr>
+                    <td>Ability to clarify doubts and explain difficult points</td>
+                    <td><input required type="number" [(ngModel)]="criteriaSecond" #criteriaSecond1="ngModel"
+                         class="form-control" name="criteriaSecond" min="1" max="5">
+                
+                    <div class="alert alert-danger" *ngIf="criteriaSecond1.touched && !criteriaSecond1.valid">
+                        Required
+                    </div>
+                    <div class="alert alert-danger" *ngIf="criteriaSecond1.touched && lessThan(5,criteriaSecond1.value)">Not in range of 1-5</div>
+                    <div  class="alert alert-danger" *ngIf="criteriaSecond1.touched && lessThan(criteriaSecond1.value,1)">Not in range of 1-5</div>
+
+                </td>
+                </tr>
+                <tr>
+                    <td>Time management in completing the content</td>
+                    <td><input required type="number" [(ngModel)]="criteriaThird" #criteriaThird1="ngModel"
+                       class="form-control" name="criteriaThird" min="1" max="5">
+                
+                    <div class="alert alert-danger" *ngIf="criteriaThird1.touched && !criteriaThird1.valid">
+                        Required
+                    </div>
+                    <div class="alert alert-danger" *ngIf="criteriaThird1.touched && lessThan(5,criteriaThird1.value)">Not in range of 1-5</div>
+                    <div  class="alert alert-danger" *ngIf="criteriaThird1.touched && lessThan(criteriaThird1.value,1)">Not in range of 1-5</div>
+
+                </td>
+                </tr>
+                <tr>
+                    <td>Handout provided(Student Guide)</td>
+                    <td><input required type="number" [(ngModel)]="criteriaFourth" #criteriaFourth1="ngModel"
+                             class="form-control" name="criteriaFourth" min="1" max="5">
+                    
+                        <div class="alert alert-danger" *ngIf="criteriaFourth1.touched && !criteriaFourth1.valid">
+                            Required
+                        </div>
+                        <div class="alert alert-danger" *ngIf="criteriaFourth1.touched && lessThan(5,criteriaFourth1.value)">Not in range of 1-5</div>
+                        <div  class="alert alert-danger" *ngIf="criteriaFourth1.touched && lessThan(criteriaFourth1.value,1)">Not in range of 1-5</div>
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>Hardware, software and network availability</td>
+                    <td><input required type="number" [(ngModel)]="criteriaFifth" #criteriaFifth1="ngModel"
+                        class="form-control" name="criteriaFifth" min="1" max="5">
+                
+                    <div class="alert alert-danger" *ngIf="criteriaFifth1.touched && !criteriaFifth1.valid">
+                        Required
+                    </div>
+                    <div class="alert alert-danger" *ngIf="criteriaFifth1.touched && lessThan(5,criteriaFifth1.value)">Not in range of 1-5</div>
+                    <div  class="alert alert-danger" *ngIf="criteriaFifth1.touched && lessThan(criteriaFifth1.value,1)">Not in range of 1-5</div>
+
+                </td>
+                </tr>
+            </table>
+            <button mdbBtn color="success" (click)="addFeedback()">Add Feedback</button>
+        </form>
+    </div>
+</div>
